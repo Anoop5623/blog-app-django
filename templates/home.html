@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{%block title %}blogs{%endblock%}
+{%block content %}
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+    <strong>message:</strong>{{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% for a in blog %}
+<div class="container">
+    <div class="card mx-auto my-3" style="width: 50rem "> </div>
+        <div class="col-6"><img src="\media\{{a.image}}" class="img-fluid card-img-top" alt="not found"></div>
+    <div class="col-lg-6 col-md-12">
+    <div class="card-body">
+        <h4 class="card-title"> {{a.title}} </h4>by {{a.author}}
+            <p class="card-text"> {{a.content | safe |truncatechars:250}} </p>
+            <button type="submit" class="btn btn-primary"><a href="/blog/{{a.slug}}"
+                    style="color:rgba(255, 255, 0, 0.973);text-decoration:none">continue reading</a></button>
+    </div></div>
+</div>
+</div>
+{% endfor %}
+{%endblock%}

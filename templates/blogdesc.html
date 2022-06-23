@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load extras %}
+{%block title %}blogdescription{% endblock title%}
+{%block content%}
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+    <strong>message:</strong>{{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+<div classs="container">
+    <div class="card mx-auto my-3" style="width: 50rem ">
+        <img src="\media\{{post.image}}"
+            class="card-img-top" alt="not found">
+        <div class="card-body">
+            <h4 class="card-title"> {{post.title}} </h5>by {{post.author}}
+                <p class="card-text"> {{post.content | safe }} </p>
+
+        </div>
+    </div>
+    
+    <div class="container">
+        <h3>comments({{comments.count}})</h3>
+        {% if user.is_authenticated %}
+        <form action="/postcomment" method="post">
+            {% csrf_token %}
+            <input type="text" name="comment" placeholder="comment">
+            <input type="hidden" name="commentno" value="">
+            <input type="hidden" name="postsno" value="{{post.id}}">
+            <input type="submit" value="submit">
+        </form>
+        {% else %}
+        <p>login to post comment</p>
+
+        {% endif %}
+
+        {% for comment in comments %}
+        <hr>
+        <div class="row my-2">
+            <div class="col-md-1 "><img class="rounded mx-auto d-block w-100 border border-dark p-2"
+                    src="data:image/jpeg;base64,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"
+                    alt="no_image"></div>
+            <div class="col-md-10">by <strong>{{comment.user.username}}<p>{{comment.timestamp | naturaltime}}</p>
+                </strong></div>
+            <div>{{ comment.comments }}</div>
+            <div class="reply mx-0">
+
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#replybox{{comment.sno}}" aria-expanded="false"
+                    aria-controls="replybox{{comment.sno}}">
+                    reply
+                </button>
+
+
+                <div class="collapse" id="replybox{{comment.sno}}">
+                    <div class="card card-body">
+                        {% if user.is_authenticated %}
+                        <form action="/postcomment" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="comment" placeholder="reply">
+                            <input type="hidden" name="commentno" value="{{comment.sno}}">
+                            <input type="hidden" name="postsno" value="{{post.id}}">
+                            <input type="submit" value="submit">
+                        </form>
+                        {% else %}
+                        <p>login to reply</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="replies my-2 ">
+                {% for reply in replydict|get_val:comment.sno %}
+                <div class="row my-2">
+                    <div class="col-md-1 ">
+                        <img class="rounded mx-auto d-block w-75 my-2 border border-dark p-2"
+                            src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
+                            alt="no_image">
+                    </div>
+                    <div class="col-md-11">
+                        <div class="col-md-11 ">
+                            <b>by {{reply.user.username}} </b> <span class="badge badge-secondary  " style="color:black;"  > {{reply.timestamp | naturaltime}}
+                                </span>
+                            <div>{{reply.comments }}</div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                {% endfor %}
+            
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+
+    {%endblock content %}
